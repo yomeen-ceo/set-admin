@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "taro-yomeen"
+  },
+  "targets": {
+    "taro-yomeen": {
+      "hosting": {
+        "example-ui-yomeen": [
+          "example-ui-yomeen"
+        ]
+      }
+    }
+  }
+}
