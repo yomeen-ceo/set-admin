@@ -6,7 +6,8 @@ const basicRoutes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { name: 'home', path: '', component: () => import('pages/home/Home.vue') }
+      { name: 'home', path: '', component: () => import('pages/home/Home.vue') },
+      { name: 'initial', path: 'initial', component: () => import('pages/home/Initial.vue') }
     ]
   }
 ]
