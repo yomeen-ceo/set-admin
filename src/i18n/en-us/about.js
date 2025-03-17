@@ -1,3 +1,4 @@
 export default {
-  title: 'About'
+  title: 'About',
+  version: '1.0'
 }

@@ -7,7 +7,8 @@ const basicRoutes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { name: 'home', path: '', component: () => import('pages/home/Home.vue') },
-      { name: 'initial', path: 'initial', component: () => import('pages/home/Initial.vue') }
+      { name: 'initial', path: 'initial', component: () => import('pages/home/Initial.vue') },
+      { name: 'setCreate', path: 'setCreate', component: () => import('pages/home/SetCreate.vue') }
     ]
   }
 ]

@@ -6,15 +6,14 @@
           flat
           dense
           round
-          icon="menu"
-          aria-label="Menu"
+          icon="home"
+          aria-label="home"
+          :to="{ name: buildI18nRouteName({ name: 'home' }) }"
         />
-
         <q-toolbar-title>
           emotion-seed（ES情感種子分析系統）
         </q-toolbar-title>
-
-        <div>ES. v{{ $q.version }}</div>
+        <div>ES. v{{ $t('about.version') }}</div>
       </q-toolbar>
     </q-header>
 

@@ -24,8 +24,9 @@ export default {
   methods: {
   },
   async mounted () {
+    const model = 'deepseek-r1:7b'
     const setData = {
-      model: 'deepseek-r1:32b',
+      model,
       messages: [
         {
           role: 'system',
@@ -37,8 +38,8 @@ export default {
       ],
       stream: false
     }
-    // const res = await this.axios.post('http://219.84.228.32:5000/v1/set/setCreate/', { setData })
-    const res = await this.axios.post('http://219.84.228.32:5000/v1/set/addData/', { setData })
+    const res = await this.axios.post('http://219.84.228.32:5000/v1/setInitial/setCreate/', { setData })
+    // const res = await this.axios.post('http://219.84.228.32:5000/v1/setInitial/addData/', { setData })
     console.log('=====================res')
     console.log(res)
   }
