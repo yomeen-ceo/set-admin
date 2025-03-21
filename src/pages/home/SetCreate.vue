@@ -238,7 +238,7 @@
           />
         </div>
       </div>
-      <q-separator inset  class="q-pa-sm" />
+      <q-separator inset class="q-pa-sm" />
       <div class="q-pa-md row">
         <div class="col-4 flex flex-center text-center">
           老虎偏高<br/>（大於5）

@@ -8,7 +8,8 @@ const basicRoutes = [
     children: [
       { name: 'home', path: '', component: () => import('pages/home/Home.vue') },
       { name: 'initial', path: 'initial', component: () => import('pages/home/Initial.vue') },
-      { name: 'setCreate', path: 'setCreate', component: () => import('pages/home/SetCreate.vue') }
+      { name: 'setCreate', path: 'setCreate', component: () => import('pages/home/SetCreate.vue') },
+      { name: 'specialCreate', path: 'specialCreate', component: () => import('pages/home/SpecialCreate.vue') }
     ]
   }
 ]

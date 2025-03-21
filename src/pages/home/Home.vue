@@ -6,7 +6,7 @@
           <h1 class="text-h4 text-center">
             ES系統
           </h1>
-          <div class="row justify-center">
+          <div class="row q-pa-md justify-center">
             <div>
               <q-btn :loading="loading" color="red" @click="setCreate()" style="min-width: 110px;" class="q-px-md">
                 建模
@@ -19,8 +19,8 @@
               </q-btn>
             </div>
             <div class="q-px-sm">
-              <q-btn :loading="loading" color="red" @click="setTest()" style="min-width: 110px;" class="q-px-md">
-                測試
+              <q-btn :loading="loading" color="red" @click="specialCreate()" style="min-width: 110px;" class="q-px-md">
+                特殊數據
                 <template v-slot:loading>
                   <div style="display: flex; align-items: center; white-space: nowrap;">
                     載入中
@@ -40,6 +40,18 @@
                 </template>
               </q-btn>
             </div>
+          </div>
+          <q-separator inset />
+          <div class="row q-pa-md justify-center">
+            <q-btn :loading="loading" color="red" @click="setTest()" style="min-width: 110px;" class="q-px-md">
+              測試
+              <template v-slot:loading>
+                <div style="display: flex; align-items: center; white-space: nowrap;">
+                  載入中
+                  <q-spinner-pie color="orange" class="q-ml-xs" />
+                </div>
+              </template>
+            </q-btn>
           </div>
         </div>
       </div>
@@ -68,6 +80,13 @@ export default {
       this.$router.push({
         name: this.buildI18nRouteName({
           name: 'setCreate'
+        })
+      })
+    },
+    specialCreate () {
+      this.$router.push({
+        name: this.buildI18nRouteName({
+          name: 'specialCreate'
         })
       })
     },
