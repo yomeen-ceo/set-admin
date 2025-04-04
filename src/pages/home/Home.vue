@@ -30,7 +30,7 @@
               </q-btn>
             </div>
             <div>
-              <q-btn :loading="loading" color="red" @click="setInitial()" style="min-width: 110px;" class="q-px-md">
+              <q-btn :loading="loading" disable color="red" @click="setInitial()" style="min-width: 110px;" class="q-px-md">
                 初始化
                 <template v-slot:loading>
                   <div style="display: flex; align-items: center; white-space: nowrap;">
