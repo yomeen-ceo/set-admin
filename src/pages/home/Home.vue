@@ -54,6 +54,87 @@
             </q-btn>
           </div>
         </div>
+        <q-dialog v-model="inputNum" persistent>
+          <q-card style="min-width: 350px">
+            <q-form
+              @submit="onSubmit"
+            >
+              <q-card-section>
+                <div class="text-h4">請輸入SET數值</div>
+              </q-card-section>
+
+              <q-card-section class="q-pt-none row">
+                <span class="text-h5">老虎：</span>
+                <q-input
+                  dense
+                  v-model="tigerNum"
+                  :rules="[
+                    val => !!val || '* 此欄位必填',
+                    val => val <= 10 || '此欄位必須填入0~10的數字',
+                    val => val >= 0 || '此欄位必須填入0~10的數字'
+                  ]"
+                  lazy-rules
+                  @keyup.enter="prompt = false"
+                />
+              </q-card-section>
+
+              <q-card-section class="q-pt-none row">
+                <span class="text-h5">孔雀：</span>
+                <q-input
+                  dense
+                  v-model="peacockNum"
+                  :rules="[
+                    val => !!val || '* 此欄位必填',
+                    val => val <= 10 || '此欄位必須填入0~10的數字',
+                    val => val >= 0 || '此欄位必須填入0~10的數字'
+                  ]"
+                  lazy-rules
+                  @keyup.enter="prompt = false"
+                />
+              </q-card-section>
+
+              <q-card-section class="q-pt-none row">
+                <span class="text-h5">無尾熊：</span>
+                <q-input
+                  dense
+                  v-model="koalaNum"
+                  :rules="[
+                    val => !!val || '* 此欄位必填',
+                    val => val <= 10 || '此欄位必須填入0~10的數字',
+                    val => val >= 0 || '此欄位必須填入0~10的數字'
+                  ]"
+                  lazy-rules
+                  @keyup.enter="prompt = false"
+                />
+              </q-card-section>
+
+              <q-card-section class="q-pt-none row">
+                <span class="text-h5">貓頭鷹：</span>
+                <q-input
+                  dense
+                  v-model="owlNum"
+                  :rules="[
+                    val => !!val || '* 此欄位必填',
+                    val => val <= 10 || '此欄位必須填入0~10的數字',
+                    val => val >= 0 || '此欄位必須填入0~10的數字'
+                  ]"
+                  lazy-rules
+                  @keyup.enter="prompt = false"
+                />
+              </q-card-section>
+
+              <q-card-actions align="right" class="text-primary">
+                <q-btn flat label="取消" v-close-popup />
+                <q-btn
+                  flat
+                  label="確定"
+                  type="submit"
+                />
+              </q-card-actions>
+              <div v-if="alert" class="text-red text-right">各項數值加起來總和必須等於20</div>
+            </q-form>
+          </q-card>
+        </q-dialog>
       </div>
     </div>
   </q-page>
@@ -70,9 +151,25 @@ export default {
   },
   data () {
     return {
+      alert: false,
       productName: '',
       loading: false,
-      progress: false
+      progress: false,
+      inputNum: false,
+      tigerNum: '',
+      peacockNum: '',
+      koalaNum: '',
+      owlNum: ''
+    }
+  },
+  watch: {
+    inputNum (data) {
+      if (!data) {
+        this.tigerNum = ''
+        this.peacockNum = ''
+        this.koalaNum = ''
+        this.owlNum = ''
+      }
     }
   },
   methods: {
@@ -92,12 +189,12 @@ export default {
     },
     setTest () {
       // we set loading state
-      this.loading = true
-      // simulate a delay
-      setTimeout(() => {
-        // we're done, we reset loading state
-        this.loading = false
-      }, 3000)
+      // this.loading = true
+      // 設定旋轉3秒後恢復正常
+      // setTimeout(() => {
+      //   this.loading = false
+      // }, 3000)
+      this.inputNum = true
     },
     async setInitial () {
       const model = 'deepseek-r1:7b'
@@ -128,6 +225,20 @@ export default {
       // const res = await this.axios.post('http://219.84.228.32:5000/v1/setInitial/addData/', { setData })
       console.log('=====================res')
       console.log(res)
+    },
+    async onSubmit () {
+      const { tigerNum, peacockNum, koalaNum, owlNum } = this
+      console.log('==============tigerNum, peacockNum, koalaNum, owlNum')
+      console.log(tigerNum, peacockNum, koalaNum, owlNum)
+      if ((+tigerNum + +peacockNum + +koalaNum + +owlNum) !== 20) {
+        this.alert = true
+      } else {
+        this.inputNum = false
+        const setNum = tigerNum + ',' + peacockNum + ',' + koalaNum + ',' + owlNum
+        const res = await this.axios.post('http://219.84.228.32:5000/v1/testNum/testNum/', { setNum })
+        console.log('========res')
+        console.log(res)
+      }
     }
   },
   async mounted () {
