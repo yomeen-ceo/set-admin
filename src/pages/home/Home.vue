@@ -135,6 +135,14 @@
             </q-form>
           </q-card>
         </q-dialog>
+        <q-dialog v-model="answerShow">
+          <q-card style="min-width: 350px">
+            <div class="text-h5">
+              您的個性是：
+            </div>
+            <div class="text-h6" v-html="answer" />
+          </q-card>
+        </q-dialog>
       </div>
     </div>
   </q-page>
@@ -144,7 +152,7 @@
 </style>
 
 <script>
-
+import { Loading } from 'quasar'
 export default {
   name: 'PageHome',
   components: {
@@ -159,7 +167,9 @@ export default {
       tigerNum: '',
       peacockNum: '',
       koalaNum: '',
-      owlNum: ''
+      owlNum: '',
+      answerShow: false,
+      answer: ''
     }
   },
   watch: {
@@ -227,6 +237,9 @@ export default {
       console.log(res)
     },
     async onSubmit () {
+      // const aiModel = 'deepseek-r1:7b'
+      const aiModel = 'deepseek-r1:14b'
+      // const aiModel = 'deepseek-r1:32b'
       const { tigerNum, peacockNum, koalaNum, owlNum } = this
       console.log('==============tigerNum, peacockNum, koalaNum, owlNum')
       console.log(tigerNum, peacockNum, koalaNum, owlNum)
@@ -234,10 +247,16 @@ export default {
         this.alert = true
       } else {
         this.inputNum = false
+        Loading.show()
         const setNum = tigerNum + ',' + peacockNum + ',' + koalaNum + ',' + owlNum
-        const res = await this.axios.post('http://219.84.228.32:5000/v1/testNum/testNum/', { setNum })
+        const res = await this.axios.post('http://219.84.228.32:5000/v1/testNum/testNum/', { setNum, aiModel })
         console.log('========res')
         console.log(res)
+        if (res) {
+          Loading.hide()
+          this.answer = res.data
+          this.answerShow = true
+        }
       }
     }
   },
