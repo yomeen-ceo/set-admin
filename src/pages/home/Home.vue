@@ -136,11 +136,26 @@
           </q-card>
         </q-dialog>
         <q-dialog v-model="answerShow">
-          <q-card style="min-width: 350px">
+          <q-card class="q-pa-md" style="min-width: 350px">
             <div class="text-h5">
               您的個性是：
             </div>
             <div class="text-h6" v-html="answer" />
+            <q-btn style="width: 100%" :ripple="{ center: true }" color="secondary" label="補充說明" no-caps @click="addExp" />
+            <div v-if="addExpShow" class="q-py-md" style="width: 100%">
+              <div>
+                <q-input
+                  ref="addExpInput"
+                  color="red-12"
+                  v-model="additionalExplanation"
+                  filled
+                  autogrow
+                />
+              </div>
+              <div class="q-py-md">
+                <q-btn style="width: 100%" :ripple="{ center: true }" color="secondary" label=",送出" no-caps @click="addExpSend" />
+              </div>
+            </div>
           </q-card>
         </q-dialog>
       </div>
@@ -168,8 +183,12 @@ export default {
       peacockNum: '',
       koalaNum: '',
       owlNum: '',
+      setNum: '',
       answerShow: false,
-      answer: ''
+      answer: '',
+      additionalExplanation: '',
+      addExpShow: false,
+      aiModel: 'deepseek-r1:14b' // deepseek-r1:7b, deepseek-r1:32b
     }
   },
   watch: {
@@ -179,10 +198,57 @@ export default {
         this.peacockNum = ''
         this.koalaNum = ''
         this.owlNum = ''
+        this.answerShow = false
+        this.answer = ''
+        this.additionalExplanation = ''
+        this.addExpShow = false
       }
     }
   },
   methods: {
+    // 補充說明送出
+    async addExpSend () {
+      this.addExpShow = false
+      const aiModel = this.aiModel
+      const additionalExplanation = this.additionalExplanation
+      const setNum = this.setNum
+      console.log('========')
+      console.log(
+        additionalExplanation,
+        setNum,
+        aiModel
+      )
+      Loading.show()
+      try {
+        const res = await this.axios.post('http://219.84.228.32:5000/v1/testNum/addExp/', { additionalExplanation, setNum, aiModel })
+        console.log('========res')
+        console.log(res)
+        Loading.hide()
+        this.additionalExplanation = ''
+        this.addExpShow = false
+        this.answer = res.data
+      } catch (error) {
+        if (error.response) {
+          // 伺服器有回應，但是錯誤狀態碼（例如 400、500）
+          console.error('❌ 伺服器錯誤：', error.response.status, error.response.data)
+        } else if (error.request) {
+          // 請求發出去了，但伺服器沒回應（你遇到的情況）
+          console.error('⚠️ 沒收到伺服器回應（可能掛了）')
+        } else {
+          // axios 本身設定錯誤或程式邏輯錯
+          console.error('🚨 程式錯誤：', error.message)
+        }
+      }
+      Loading.hide()
+    },
+    // 當按下「補充說明」時
+    async addExp () {
+      // 彈出填入欄位
+      this.addExpShow = true
+      // 自動遊標指向輸入欄位
+      await this.$nextTick()
+      this.$refs.addExpInput.focus()
+    },
     setCreate () {
       this.$router.push({
         name: this.buildI18nRouteName({
@@ -237,9 +303,7 @@ export default {
       console.log(res)
     },
     async onSubmit () {
-      // const aiModel = 'deepseek-r1:7b'
-      const aiModel = 'deepseek-r1:14b'
-      // const aiModel = 'deepseek-r1:32b'
+      const aiModel = this.aiModel
       const { tigerNum, peacockNum, koalaNum, owlNum } = this
       console.log('==============tigerNum, peacockNum, koalaNum, owlNum')
       console.log(tigerNum, peacockNum, koalaNum, owlNum)
@@ -249,6 +313,7 @@ export default {
         this.inputNum = false
         Loading.show()
         const setNum = tigerNum + ',' + peacockNum + ',' + koalaNum + ',' + owlNum
+        this.setNum = setNum
         const res = await this.axios.post('http://219.84.228.32:5000/v1/testNum/testNum/', { setNum, aiModel })
         console.log('========res')
         console.log(res)
