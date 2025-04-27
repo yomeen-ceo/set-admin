@@ -53,6 +53,18 @@
               </template>
             </q-btn>
           </div>
+          <q-separator inset />
+          <div class="row q-pa-md justify-center">
+            <q-btn :loading="loading" color="red" @click="testMyCard()" style="min-width: 110px;" class="q-px-md">
+              測試 my card
+              <template v-slot:loading>
+                <div style="display: flex; align-items: center; white-space: nowrap;">
+                  載入中
+                  <q-spinner-pie color="orange" class="q-ml-xs" />
+                </div>
+              </template>
+            </q-btn>
+          </div>
         </div>
         <q-dialog v-model="inputNum" persistent>
           <q-card style="min-width: 350px">
@@ -158,6 +170,13 @@
             </div>
           </q-card>
         </q-dialog>
+        <q-dialog v-model="mCardShow">
+          <q-card class="q-pa-md" style="min-width: 350px">
+            <div>
+              <mcard-page :mcardData="mcardData" />
+            </div>
+          </q-card>
+        </q-dialog>
       </div>
     </div>
   </q-page>
@@ -168,12 +187,16 @@
 
 <script>
 import { Loading } from 'quasar'
+import McardPage from 'components/McardPage'
 export default {
   name: 'PageHome',
   components: {
+    McardPage
   },
   data () {
     return {
+      mCardShow: false,
+      mcardData: null,
       alert: false,
       productName: '',
       loading: false,
@@ -206,6 +229,26 @@ export default {
     }
   },
   methods: {
+    async testMyCard () {
+      console.log('============testMyCard')
+      // const CO2CardID = 'EPMDSN020633A'
+      // const CusTradeNo = 'YM202504270010002'
+      // const Qty = 1
+      // const Price = 50
+      try {
+        const res = await this.axios.post('http://localhost:5000/v1/newebPay/createOrder/')
+        // const res = await this.axios.post('http://219.84.228.32:5000/v1/myCard/create/', {
+        //   CO2CardID, CusTradeNo, Qty, Price
+        // })
+        console.log('=========res.data')
+        console.log(res.data)
+        this.mcardData = res.data
+        this.mCardShow = true
+      } catch (err) {
+        console.log('=======err')
+        console.log(err)
+      }
+    },
     // 補充說明送出
     async addExpSend () {
       this.addExpShow = false
