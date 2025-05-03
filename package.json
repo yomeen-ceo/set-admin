@@ -6,7 +6,8 @@
   "author": "admin@yomeen.com",
   "private": true,
   "scripts": {
-    "dev": "quasar dev -m ssr --reset-cache",
+    "dev": "NODE_OPTIONS=--openssl-legacy-provider quasar dev -m ssr --reset-cache",
+    "dev2": "quasar dev -m ssr --reset-cache",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
   },
